@@ -299,12 +299,12 @@ $$
 
 ### LSTM Gradient Flow
 With input $$x_t$$ and hidden representation $$h_{t}$$, the model produces four different gate outputs, which will produce cell state $$c_t$$.
-This $$c_t$$ will produce some hidden representation. This setup shown in Figure allows the model to avoid vanishing gradient problems as the gradients flowing back can choose not to flow through $$h_t$$ but flow through $$c_t$$ instead.
+This $$c_t$$ will produce some hidden representation. This setup in Figure 3 shows how the model can avoid vanishing gradient problems as the gradients flowing back can choose not to flow through $$h_t$$ but flow through $$c_t$$ instead. The gradients can flow all the way back in time
+without needing to rely on going through all the gates.
 
-$$
-
+Thus, when there is a bunch of LSTMs stacked together, we can get an uninterrupted gradient flow where the gradients flow back through cell states instead of hidden states $$h$$ without vanishing in every time step.
 <div class="fig figcenter">
-  <img src="/assets/rnn/lstm_gradient.png" width="50%" >
-</div>
+  <img src="/assets/rnn/lstm_gradient.png" width="40%" >
+    <div class="figcaption"> <b> Figure 3.</b> LSTM Gradient Flow </div>
 
-$$
+</div>
