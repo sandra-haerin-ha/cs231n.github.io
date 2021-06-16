@@ -302,9 +302,16 @@ With input $$x_t$$ and hidden representation $$h_{t}$$, the model produces four 
 This $$c_t$$ will produce some hidden representation. This setup in Figure 3 shows how the model can avoid vanishing gradient problems as the gradients flowing back can choose not to flow through $$h_t$$ but flow through $$c_t$$ instead. The gradients can flow all the way back in time
 without needing to rely on going through all the gates.
 
-Thus, when there is a bunch of LSTMs stacked together, we can get an uninterrupted gradient flow where the gradients flow back through cell states instead of hidden states $$h$$ without vanishing in every time step.
+Thus, when there is a bunch of LSTMs stacked together, we can get an uninterrupted gradient flow where the gradients flow back through cell states instead of hidden states $$h$$ without vanishing in every time step. Figure 3 shows that gradient contains a vector of activations of the "forget" gate. This allows better control of gradients values by using suitable parameter updates of the "forget" gate.
 <div class="fig figcenter">
   <img src="/assets/rnn/lstm_gradient.png" width="40%" >
     <div class="figcaption"> <b> Figure 3.</b> LSTM Gradient Flow </div>
 
 </div>
+#### Do LSTM solve the vanishing gradient problem? 
+The LSTM architecture makes it easier for the RNN to preserve information over many timesteps. For example,
+if $$f = 1$$ and $$i = 0$$, then the information of that cell is preserved indefinitely.
+By contrast, it’s harder for vanilla RNN to learn a recurrent weight matrix $$W_{h}$$ that preserves info in hidden state.
+LSTM doesn’t guarantee that there is no vanishing/exploding gradient, but it does provide an easier way for the model 
+to learn long-distance dependencies. 
+
