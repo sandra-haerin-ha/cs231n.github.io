@@ -308,7 +308,8 @@ Thus, when there is a bunch of LSTMs stacked together, we can get an uninterrupt
     <div class="figcaption"> <b> Figure 3.</b> LSTM Gradient Flow </div>
 
 </div>
-#### Do LSTM solve the vanishing gradient problem? 
+
+### Does LSTM solve the vanishing gradient problem? 
 The LSTM architecture makes it easier for the RNN to preserve information over many timesteps. For example,
 if $$f = 1$$ and $$i = 0$$, then the information of that cell is preserved indefinitely.
 By contrast, it’s harder for vanilla RNN to learn a recurrent weight matrix $$W_{h}$$ that preserves info in hidden state.
