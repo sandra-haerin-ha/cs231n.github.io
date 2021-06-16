@@ -249,12 +249,26 @@ In practice, we can treat the exploding gradient problem through gradient clippi
 ### LSTM Formulation
 
 The following is the precise formulation for LSTM. On step $$t$$, there is a hidden state $$h_t$$ and
-a cell state $$c_t$$. Both $$h_t$$ and $$c_t$$ are vectors of size $$n$$. One distinction of LSTM from
-Vanilla RNN is that LSTM has this additional $$c_t$$ cell state, and intuitively it can be thought of as
-$$c_t$$ stores long-term information. LSTM can read, erase, and write information to and from this $$c_t$$ cell.
+a cell state $$c_t$$. Both $$h_t$$ and $$c_t$$ are vectors of size $$n$$. In the lecture, we call the last gate $$g$$
+as "gate" gate, which has tanh similar to the classical RNN setup. 
+One distinction of LSTM from Vanilla RNN is that LSTM has this additional $$c_t$$ cell state, and intuitively it can be thought of as
+$$c_t$$ that stores long-term information. LSTM can read, erase, and write information to and from this $$c_t$$ cell.
 The way LSTM alters $$c_t$$ cell is through three special gates: $$i, f, o$$ which correspond to “input”,
-“forget”, and “output” gates. The values of these gates vary from closed (0) to open (1). All $$i, f, o$$
-gates are vectors of size $$n$$.
+“forget”, and “output” gates. 
+
+* **"Input" Gate:** Instead of tanh, the "input" gate $$i$$ has a sigmoid function, which converts inputs to values between zero and one.
+This serves as a switch, where values are either almost always zero or almost always one. 
+This "input" gate decides whether to take the RNN output that is produced by the "gate" gate $$g$$ and 
+multiplies the output with input gate $$i$$.
+* **"Forget" Gate:** The "forget" gate $$f$$ also has a sigmoid function that works like a switch described in "input" gate. 
+This "forget" gate learns to erase hidden representations from the previous time steps, which is why LSTM will have two 
+hidden represtnations $$h_t$$ and cell state $$c_t$$. This $$c_t$$ will get propagated over time and learn whether to forget
+the previous cell state or not.
+* **"Output" Gate:** The output gate $$o$$ determines how the model takes the cell state $$c_t$$ and then produces the next hidden representation.
+
+Inputs are passed through these gates that will determine whether they get propagated to the next
+timestep by having values that vary from closed (0) to open (1). All $$i, f, o$$
+gates are vectors of size $$n$$. 
 
 At every timestep we have an input vector $$x_t$$, previous hidden state $$h_{t-1}$$, previous cell state $$c_{t-1}$$,
 and LSTM computes the next hidden state $$h_t$$, and next cell state $$c_t$$ at timestep $$t$$ as follows:
@@ -282,3 +296,15 @@ $$
 <div class="fig figcenter">
   <img src="/assets/rnn/lstm_mformula_2.png" width="40%" >
 </div>
+
+### LSTM Gradient Flow
+With input $$x_t$$ and hidden representation $$h_{t}$$, the model produces four different gate outputs, which will produce cell state $$c_t$$.
+This $$c_t$$ will produce some hidden representation. This setup shown in Figure allows the model to avoid vanishing gradient problems as the gradients flowing back can choose not to flow through $$h_t$$ but flow through $$c_t$$ instead.
+
+$$
+
+<div class="fig figcenter">
+  <img src="/assets/rnn/lstm_gradient.png" width="50%" >
+</div>
+
+$$
